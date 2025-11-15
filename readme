@@ -116,3 +116,16 @@ _sys.logger.log('your log body') //logs only for worker1
 
 
 _sys.logger.always('your log body') // logs for all workers and primary 
+
+
+
+test route after run 
+http://localhost:3000/api/users/v1}/debug/pid
+
+
+exampole output :
+code 200 ok
+{
+    "pid": 132680,
+    "time": "2025-11-15T00:44:23.192Z"
+}
