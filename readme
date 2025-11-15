@@ -1,0 +1,118 @@
+
+
+
+root
+│    src/
+│    ├── modules/                        # Your application’s feature modules
+│    │   ├── users/                      # e.g. user-management endpoints
+│   │   │   ├── controller/index.js      # create the need
+│   │   │   └── models/index.js
+│   │   │   └── repositories/index.js
+│   │   │   └── routes/index.js
+|   │   │   └── sanitizer/index.js
+|   │   │   └── services/index.js
+    │   │   └── validator/index.js
+    │   │
+    │   │── OTHER MODULES
+    |
+    │
+    └── system/                           # The core framework pieces
+        ├── cluster/                      # clustering logic
+        │   ├── cluster-manager.js        # main cluster manager
+        │   ├── primary.js                # primary server and worker forking control
+        │   └── worker.js                 # cluster/worker setup + sticky sessions
+        │   ├── worker-app.js             # bootstrap Fastify
+        ├── core/                         # Database layer
+        │   ├── routing/route-factory.js             # auto route loader under module/version/routes
+        │   └── web   # main web directory
+        │        └── middleware
+        |             └── response-wrapper.js       # NOT IN USE => keep only for reference
+        |        └── sanitizer                      # to add needed sanitization logic when needed
+        |        └── validators                     # to add needed validation logic when needed
+        |        └── web-response
+        |        |     └── plugin                               # all needed fasify plugin that is responsible for web responses
+                        |____onrequestAuth/required-header/js    # on request security layer of request Authorization
+        |        |      └── response-plugin                      # plugin for  (ResponseFormatter.js)
+        |        |___ResponseFormatter.js                        # main core web-response controller
+        |
+        |
+        |
+        |
+        ├── database/                                   # Centralized data-access API
+        │   └── models/index.js                         # to write sub-models for utility usage
+        |   └── repositories/ base-repository.js        # the centralized/shared repo that have all query function for all models
+        |   └── utils
+        |          └── pg/schema-manager.js         # PG DB ORM
+        ├── globalObject/                           # global class logic
+        │   └── _sys
+        │        └── config.js
+        │        └── index.js
+        │        └── logger.js                      # global logger control
+        │        └── utils.js
+        |
+        |
+        |
+        ├── plugins                             # main fasify plugin's
+            |     ├── redis/redis.js            #redis plugin- connector
+        │   └── postgres
+        │          └── config.js                # PG connection config
+        │          └── ps-db-connector          # main PG connector
+        |
+        |
+        |
+        |
+        |
+        |----setup-instructions.js # documentation file
+|
+|
+|
+|
+|---server.js # main server run file(entry point)
+
+
+Run instructions: (npm install) check the steps below then run  (npm run dev) <=  nodmon run / npm run start <= one time run 
+
+Very importnt step :
+MZ-core is connected to postgres db and ready to 
+connect to be able to run the core without problems make sure
+ Postgres is running and config in env is setup correctly (refer to env example code)
+
+
+
+
+1- IF want to run without  cache layer change REDIS_IN_USE  =false  in (.env) false by default
+2- If DB and cache layer needed setup the configuration in .env  under (101-DATABASE's config's)
+3- server will run on 127.0.0.2:3000 under dev mode ( mode is controlled in .env file at the top under ENVIRONMENT)
+4- [+] logs that comes from primary process [-] is for log that comes from worker process
+5- _sys is active in the system allows use _sys.logger.log to always make loges under your control
+6- always follow the structure when adding a new file or logic in any directory
+
+
+After DB connection you will see:
+
+clean startup logs if DB is connected and cache layer  : ( when u run the core that what u must see)
+
+[+] environment : DEV | isLocal:true | isProd:false
+[+] PRIMARY SERVER RUNNING: 127.0.0.2:3000
+[-] W1 ✅ Available models: [ 'User', 'Post' ]
+[-] W1 ✅ PG Database connected successfully
+[-] W1 ✅ Redis connected <= (if there was redis connection its off by default )
+[-] W1 Worker 175476 ready and listening via sticky session
+[+]  4 workers is running ...
+[+] Primary Process Completed Children Forking
+
+
+hints: (if your are windows user use WSL to install redis and Ubuntu locally on your device )
+# redis comments on wsl to insure connection // (bash comments ) Ubuntu 24.04.2 LTS
+1- redis-cli ping // response pong
+2- sudo service redis-server status // response active running
+3-sudo nano /etc/redis/redis.conf // Open the Redis config file
+
+
+to use logging in the core use any where is your logic the following :
+
+
+_sys.logger.log('your log body') //logs only for worker1
+
+
+_sys.logger.always('your log body') // logs for all workers and primary 

@@ -1,0 +1,9 @@
+clustering :
+
+the current  cluster logic is used to create sticky session between the primary process and the workers using socket emit's and the heart beats from worker
+to primary
+
+primary will manage the workers ( fork / restart / kill )
+worker weill handle the worker-app logic that runs the fastify server so every worker will run a fastify app on his own
+
+master will run the server
