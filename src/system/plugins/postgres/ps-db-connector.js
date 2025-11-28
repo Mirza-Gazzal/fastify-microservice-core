@@ -13,6 +13,7 @@ const schema = new schemaManager();
 const dbConfig = require('../postgres/config').postgres;
 
 async function dbConnector(fastify, options) {
+    _sys.logger.always("=====================================db conneter")
     // Initialize Sequelize instance
     const sequelize = new Sequelize(
         dbConfig.database,
@@ -23,8 +24,10 @@ async function dbConnector(fastify, options) {
 
     try {
         // Authenticate the connection
+        _sys.logger.always('==============================DB plugin: before authenticate');
         await sequelize.authenticate();
       //  fastify.log.info('==> PostgresSQL connection authenticated');
+      _sys.logger.always('=================================DB plugin: after authenticate');
 
 
         // 1. Dynamically load models from the `/models` directory (excluding index.js)

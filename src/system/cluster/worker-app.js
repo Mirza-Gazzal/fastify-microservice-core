@@ -11,7 +11,7 @@ const jwtToken = require('../plugins/jwt/jwt');
 async function bootstrapApp(server) {
     const isFirstWorker = cluster.worker?.id === 1; // get the first worker allow only  worker 1 to logg for fastify ( less and more clear logging way)
  
-    const fastify = fastifyFactory({ logger: false, server });
+    const fastify = fastifyFactory({ logger: true, server });
 
 
     // -----Response wrapper/response section ( web - response )-----
