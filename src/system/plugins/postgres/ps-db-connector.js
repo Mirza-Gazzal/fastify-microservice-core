@@ -25,6 +25,8 @@ async function dbConnector(fastify, options) {
     try {
         // Authenticate the connection
         _sys.logger.always('==============================DB plugin: before authenticate');
+                _sys.logger.always('==============================DB plugin: before authenticate=========================');
+
         await sequelize.authenticate();
       //  fastify.log.info('==> PostgresSQL connection authenticated');
       _sys.logger.always('=================================DB plugin: after authenticate');
